@@ -121,13 +121,10 @@ async def start_ota(ble_address: str, file_name: str):
         if len(data) < end:
             end = len(data)
         parts = (end - start) / MTU
-        #print(parts)
-        #print(math.ceil(parts))
         for i in range(0, int(parts)):
             toSend = bytearray([0xFB, i])
             for y in range(0, MTU):
                 toSend.append(data[(position*PART)+(MTU * i) + y])
-            #print(toSend)
             await send_data(client, toSend, False)
         if (end - start)%MTU != 0:
             rem = (end - start)%MTU
@@ -214,8 +211,6 @@ if __name__ == "__main__":
     if (len(sys.argv) > 2):
         print("Trying to start OTA update")
         if isValidAddress(sys.argv[1]) and path.exists(sys.argv[2]):
-            #loop = asyncio.get_event_loop()
-            #loop.run_until_complete(start_ota(sys.argv[1], sys.argv[2]))
             asyncio.run(start_ota(sys.argv[1], sys.argv[2]))
         else:
             if not isValidAddress(sys.argv[1]):
