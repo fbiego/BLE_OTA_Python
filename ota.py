@@ -74,13 +74,11 @@ async def start_ota(ble_address: str, file_name: str):
                 for x in range(0, fileParts):
                     await send_part(x, fileBytes, clt)
                     printProgressBar(x + 1, total, prefix = 'Progress:', suffix = 'Complete', length = 50)
-                    await asyncio.sleep(1.0)
             else:
                 await send_part(0, fileBytes, clt)
                 
         if (data[0] == 0xF1):
             nxt = int.from_bytes(bytearray([data[1], data[2]]), "big")  
-            #await asyncio.sleep(1.0)
             await send_part(nxt, fileBytes, clt)
             printProgressBar(nxt + 1, total, prefix = 'Progress:', suffix = 'Complete', length = 50)
         if (data[0] == 0xF2):
