@@ -196,11 +196,9 @@ def isValidAddress(str):
     # Return if the string
     # matched the ReGex
     if(re.search(p, str) and len(str) == 17):
-        print("MAC")
         return True
     else:
         if (re.search(q, str) and len(str) == 36):
-            print("UUID")
             return True
         else:
             return False
