@@ -82,7 +82,8 @@ async def start_ota(ble_address: str, file_name: str):
             await send_part(nxt, fileBytes, clt)
             printProgressBar(nxt + 1, total, prefix = 'Progress:', suffix = 'Complete', length = 50)
         if (data[0] == 0xF2):
-            print("Installing firmware")
+            ins = 'Installing firmware'
+            #print("Installing firmware")
         if (data[0] == 0x0F):
             result = bytearray([])
             for s in range(1, len(data)):
@@ -152,6 +153,9 @@ async def start_ota(ble_address: str, file_name: str):
         global clt
         clt = client
         fileParts = math.ceil(len(fileBytes) / PART)
+        fileLen = len(fileBytes)
+        fileSize = bytearray([0xFE, fileLen >>  24 & 0xFF, fileLen >>  16 & 0xFF, fileLen >>  8 & 0xFF, fileLen & 0xFF])
+        await send_data(client, fileSize, False)
         global total
         total = fileParts
         otaInfo = bytearray([0xFF, int(fileParts/256), int(fileParts%256), int(MTU / 256), int(MTU%256) ])
